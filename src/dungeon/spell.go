@@ -16,7 +16,7 @@ func (s *Spell) Cast() {
 	fmt.Printf("Casting %s...\n", s.name)
 }
 
-func main() {
-	spell := &Spell{"Magic Missile"}
-	spell.Cast()
-}
+// func main() {
+// 	spell := &Spell{"Magic Missile"}
+// 	spell.Cast()
+// }
