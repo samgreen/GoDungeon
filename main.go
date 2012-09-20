@@ -6,9 +6,11 @@ import (
 )
 
 func main() {
-	// player := new(dungeon.Player)
-	var world *dungeon.World
-	world = dungeon.NewWorld("Mordor")
+	player := dungeon.NewPlayer("Sam")
+	world := dungeon.NewWorld("Mordor")
 
-	fmt.Printf("World: %s\n", world.Name())
+	world.AddPlayer(player)
+	
+
+	fmt.Printf("World Value:\n%+v", world)
 }
