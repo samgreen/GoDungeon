@@ -2,12 +2,15 @@ package dungeon
 
 import (
     "fmt"
+    "log"
 )
+
+type PlayerMap map[string]*Player
 
 type World struct {
 	name		string
 	activeZones []*Zone
-    players     map[string]*Player
+    players     PlayerMap
 }
 
 // Constructor
@@ -15,7 +18,7 @@ func NewWorld(name string) *World {
     w := &World{
         name: name, 
         activeZones: make([]*Zone, 0, 32),
-        players: make(map[string]*Player),
+        players: make(PlayerMap),
     }
 
     w.loadZones()
@@ -42,10 +45,14 @@ func (w *World) String() string {
 
 func (w *World) AddPlayer(player *Player) {
     w.players[player.Name()] = player
+    log.Printf("[WORLD] Player %s has joined the world.", player.Name())
+    
     w.activeZones[0].AddPlayer(player)
 }
 
 func (w *World) RemovePlayer(player *Player) {
+    log.Printf("[WORLD] Player %s has left the world.", player.Name())
+
     delete(w.players, player.Name())
 }
 
@@ -54,9 +61,11 @@ func (w *World) FindPlayer(name string) *Player {
 }
 
 func (w *World) loadZones() {
-    tutorialZone := NewZone("Tutorial", Size3D{Size{10,15},20})
-    caveZone := NewZone("Windy Caves", Size3D{Size{20,30},50})
-    cityZone := NewZone("Atlas City", Size3D{Size{50,50},50})
+    tutorialZone := NewZoneWithBounds("Tutorial", Size3D{Size{10,15},20})
+    caveZone := NewZoneWithBounds("Windy Caves", Size3D{Size{20,30},50})
+    cityZone := NewZoneWithBounds("Atlas City", Size3D{Size{50,50},50})
 
     w.activeZones = append(w.activeZones, tutorialZone, caveZone, cityZone)
+
+    log.Print("[WORLD] Loaded all zones successfully.")
 }

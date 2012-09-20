@@ -1,6 +1,7 @@
 package dungeon
 
 import (
+	"log"
 	"fmt"
 )
 
@@ -8,19 +9,23 @@ type Zone struct {
 	bounds  Size3D
 	id 		int32
 	name 	string
-	players map[string]*Player
+	players PlayerMap
 }
 
 var nextZoneId int32 = 0
 
-func NewZone(name string, bounds Size3D) *Zone {
+func NewZone(name string) *Zone {
+	return NewZoneWithBounds(name, Size3D{Size{10,15},20})
+}
+
+func NewZoneWithBounds(name string, bounds Size3D) *Zone {
 	nextZoneId += 1
 
 	return &Zone{
 		bounds: bounds,
 		id: nextZoneId,
 		name: name,
-		players: make(map[string]*Player),
+		players: make(PlayerMap),
 	}
 }
 
@@ -30,9 +35,12 @@ func (z *Zone) AddPlayer(player *Player) {
 	}
 	z.players[player.Name()] = player
 	player.CurrentZone = z
+	log.Printf("[ZONE] Player %s has entered %s.", player.name, z.name)
 }
 
 func (z *Zone) RemovePlayer(player *Player) {
+	log.Printf("[ZONE] Player %s has left %s.", player.name, z.name)
+	
 	player.CurrentZone = nil
 	delete(z.players, player.Name())
 }
